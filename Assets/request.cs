@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,14 +17,41 @@ public class request : MonoBehaviour
     {
     
 
-        StartCoroutine(GetRequestUser("http://localhost:8242/api/Users1/1"));
-     //   StartCoroutine(GetRequest("http://localhost:8242/api/Players/1"));
-        StartCoroutine(GetRequestRanks("http://localhost:8242/api/Rankings1/1"));
-   //     StartCoroutine(GetRequestPlayerSkin("http://localhost:8242/api/PlayerSkins1/1"));
+    //    StartCoroutine(GetRequestUser("http://localhost:8242/api/Users1/1"));
+    StartCoroutine(GetRequest("http://localhost:8242/api/Players"));
+   // StartCoroutine(GetRequest1("http://localhost:8242/api/Players"));
+        //    StartCoroutine(GetRequestRanks("http://localhost:8242/api/Ranks1"));
+      //  StartCoroutine(GetRequestPlayerSkin("http://localhost:8242/api/PlayerSkins1/1"));
       
       //  StartCoroutine(GetRequestSkin("http://localhost:8242/api/Skins1/1"));
     }
+    //player
+    //IEnumerator GetRequest1(string url)
+    //{
+    //    using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
+    //    {
+    //        yield return webRequest.SendWebRequest();
+    //        switch (webRequest.result)
+    //        {
+    //            case UnityWebRequest.Result.ConnectionError:
+    //            case UnityWebRequest.Result.DataProcessingError:
+    //            case UnityWebRequest.Result.ProtocolError:
+    //                print("error");
+    //                break;
+    //            case UnityWebRequest.Result.Success:
 
+    //                //    print(webRequest.downloadHandler.text);
+    //                print("Players");
+    //                Player player = JsonUtility.FromJson<Player>(webRequest.downloadHandler.text);
+
+    //                print("Nickname: " + player.nickName);
+    //                print("datos : " + player.IdNavigation);
+
+
+    //                break;
+    //        }
+    //    }
+    //}
     IEnumerator GetRequest(string url)
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
@@ -38,19 +66,31 @@ public class request : MonoBehaviour
                     break;
                 case UnityWebRequest.Result.Success:
                   
-                //    print(webRequest.downloadHandler.text);
-                    print("Players");
-                    Player player = JsonUtility.FromJson<Player>(webRequest.downloadHandler.text);
-                 
-                    print("Nickname: "+player.nickName);
-                    print("datos : "+player.IdNavigation);
-                    
+              //print(webRequest.downloadHandler.text);
+                   // print("Players");
+                    Players players = JsonUtility.FromJson<Players>("{\"players\":"+webRequest.downloadHandler.text+"}");
 
+                    //  print("Nickname: "+players);
+                    //print("datos : "+players.IdNavigation);
+
+                    DateTime NowTime = DateTime.Now;
+                    // a1.text= players.reg
+
+                    for (int i = 0; i < players.players.Length; i++)
+                    {
+                        print("Players"  + players.players[i].nickName + "Max Experiencia " + players.players[0].playerSkins);
+
+                        a1.text= (players.players[0].id+(" ")+players.players[0].nickName).ToString();
+                        a2.text= (players.players[1].id+ (" ") + players.players[1].nickName).ToString();
+                        a3.text= (players.players[2].id+ (" ") + players.players[2].nickName).ToString();
+                        a4.text= (players.players[3].IdNavigation+ (" ") + players.players[3].nickName).ToString();
+                  
+                    }
                     break;
             }
         }
     }
-    //Playerskin
+
     IEnumerator GetRequestPlayerSkin(string url)
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
@@ -65,15 +105,40 @@ public class request : MonoBehaviour
                     break;
                 case UnityWebRequest.Result.Success:
 
-                    // print(webRequest.downloadHandler.text);
-                    print("PlayerSkins");
-                 
-                    PlayerSkins playerSkins= JsonUtility.FromJson<PlayerSkins>(webRequest.downloadHandler.text);
+                    Skins skins = JsonUtility.FromJson<Skins>("{\"players\":" + webRequest.downloadHandler.text + "}"); 
+           
+                   for (int i = 0; i <skins.skins.Length; i++)
+                    {
+                        print("Skin Name " + skins.skins[i].name);
+                        //a1.text = (players.players[0].id + (" ") + players.players[0].nickName).ToString();
+                        //a2.text = (players.players[1].id + (" ") + players.players[1].nickName).ToString();
+                        //a3.text = (players.players[2].id + (" ") + players.players[2].nickName).ToString();
+
+                    }
+                    break;
+            }
+        }
+    }
+    ////Playerskin
+    IEnumerator GetRequestPlayerSkin1(string url)
+    {
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
+        {
+            yield return webRequest.SendWebRequest();
+            switch (webRequest.result)
+            {
+                case UnityWebRequest.Result.ConnectionError:
+                case UnityWebRequest.Result.DataProcessingError:
+                case UnityWebRequest.Result.ProtocolError:
+                    print("error");
+                    break;
+                case UnityWebRequest.Result.Success:
+                    PlayerSkins playerSkins = JsonUtility.FromJson<PlayerSkins>(webRequest.downloadHandler.text);
 
                     print("Fecha: " + playerSkins.date);
                     print("playerid: " + playerSkins.playerId);
                     print("skinid: " + playerSkins.skinId);
-                
+
 
                     break;
             }
